@@ -1,8 +1,10 @@
-FROM maven:3.9-openjdk-17 AS build
+# Dockerfile
+FROM maven:3.9.4-eclipse-temurin-17 AS build
 WORKDIR /app
+# copy pom first to cache dependency resolution
 COPY pom.xml .
 COPY src ./src
-RUN mvn -DskipTests package
+RUN mvn -B -DskipTests package
 
 FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
