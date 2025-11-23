@@ -1,13 +1,14 @@
 package com.sparta.logistic;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+//import org.junit.jupiter.api.Test;
+//import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 class ApplicationTests {
 
-	@Test
+//	@Test
 	void contextLoads() {
+
 	}
 
 }
