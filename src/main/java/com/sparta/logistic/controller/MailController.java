@@ -2,13 +2,11 @@ package com.sparta.logistic.controller;
 
 import com.sparta.logistic.dto.EnquiryRequest;
 import com.sparta.logistic.mail.SmtpMailSender;
-import jakarta.mail.MessagingException;
-import jakarta.mail.AuthenticationFailedException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.*;
-
+import com.sendgrid.*;
 import java.util.Properties;
 
 @RestController
@@ -73,16 +71,8 @@ public class MailController {
 //            sender.testConnection();
 
             // If testConnection() succeeds, proceed to send
-            sender.send(to, subject, prepareMessageBody(enquiry));
+            sender.sendMailViaSendGrid(to, subject, prepareMessageBody(enquiry));
             return ResponseEntity.ok("Mail sent (check logs for SMTP debug).");
-        } catch (AuthenticationFailedException afe) {
-            // Authentication problems: return 401-like status
-            String safeMsg = "SMTP authentication failed. Verify username/API key and that the credential is active.";
-            return ResponseEntity.status(401).body(safeMsg + " " + afe.getMessage());
-        } catch (MessagingException me) {
-            // If the server is not reachable or other messaging errors occurred, return 503
-            String msg = me.getMessage() != null ? me.getMessage() : "MessagingException";
-            return ResponseEntity.status(503).body("Mail server unavailable or failed: " + msg);
         } catch (Exception ex) {
             // catch-all to avoid leaking internals
             return ResponseEntity.status(500).body("Unexpected error while sending mail.");
